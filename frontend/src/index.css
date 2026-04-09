@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-slate-100 text-slate-800 antialiased;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-5 py-2.5 bg-teal-500 text-white text-sm font-medium rounded-md 
+           hover:bg-teal-600 transition-colors;
+  }
+  
+  .btn-secondary {
+    @apply px-5 py-2.5 bg-slate-800 text-white text-sm font-medium rounded-md
+           hover:bg-slate-900 transition-colors;
+  }
+
+  .btn-outline {
+    @apply px-5 py-2.5 bg-transparent text-slate-700 text-sm font-medium rounded-md border border-slate-300
+           hover:bg-slate-100 transition-colors;
+  }
+  
+  .input-field {
+    @apply w-full px-3 py-2.5 bg-white border border-slate-300 rounded-md text-sm
+           placeholder:text-slate-400 focus:outline-none focus:border-teal-500 transition-colors;
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-teal-600 to-primary-600 bg-clip-text text-transparent;
+  }
+  
+  .section-padding {
+    @apply py-12 md:py-16 px-4 md:px-6;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 rounded-full hover:bg-slate-400;
+}
