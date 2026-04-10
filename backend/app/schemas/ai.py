@@ -13,6 +13,8 @@ class AIChatResponse(BaseModel):
     intent: Optional[str] = None
     extracted_data: Optional[Dict[str, Any]] = None
     booking_confirmed: Optional[bool] = None
+    suggestions: Optional[List[str]] = None
+    quick_replies: Optional[List[str]] = None
 
 
 class AIBookingRequest(BaseModel):

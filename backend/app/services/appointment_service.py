@@ -13,6 +13,9 @@ class AppointmentService:
         self.db = db
     
     def check_slot_availability(self, date: datetime, time: str) -> bool:
+        from app.utils.datetime_helpers import is_friday, is_valid_clinic_day
+        from app.crud.clinic import get_clinic_settings
+        
         settings = get_clinic_settings(self.db)
         
         if is_friday(date):

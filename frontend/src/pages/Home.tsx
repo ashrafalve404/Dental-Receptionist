@@ -206,8 +206,8 @@ export default function Home() {
             <Link to="/chat">
               <Button 
                 size="lg" 
-                className="bg-white text-black hover:bg-slate-100 border-none"
-                icon={<ArrowRight className="w-5 h-5" />}
+                className="bg-white !text-black hover:bg-slate-100 border-none"
+                icon={<ArrowRight className="w-5 h-5 text-black" />}
               >
                 Start Chatting Now
               </Button>

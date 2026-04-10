@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     APP_ENV: str = "development"
     DATABASE_URL: str = "sqlite:///./as_clinic.db"
     OPENAI_API_KEY: str = ""
+    GROQ_API_KEY: str = ""
     
     class Config:
         env_file = str(BASE_DIR / ".env")

@@ -44,6 +44,13 @@ def parse_date(date_str: str) -> Optional[datetime]:
         except ValueError:
             continue
     
+    for fmt in ["%d %B", "%d %b"]:
+        try:
+            parsed = datetime.strptime(date_str, fmt)
+            return parsed.replace(year=today.year)
+        except ValueError:
+            continue
+    
     return None
 
 

@@ -10,6 +10,7 @@ import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminPatients from './pages/admin/AdminPatients';
 import AdminAppointments from './pages/admin/AdminAppointments';
+import AdminConversations from './pages/admin/AdminConversations';
 import AdminFAQs from './pages/admin/AdminFAQs';
 import AdminSettings from './pages/admin/AdminSettings';
 
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/patients" element={<AdminPatients />} />
           <Route path="/admin/appointments" element={<AdminAppointments />} />
+          <Route path="/admin/conversations" element={<AdminConversations />} />
           <Route path="/admin/faqs" element={<AdminFAQs />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
         </Route>

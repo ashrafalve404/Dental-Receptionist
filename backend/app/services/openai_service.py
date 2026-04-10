@@ -8,14 +8,27 @@ from app.core.config import get_settings
 class OpenAIService:
     def __init__(self):
         settings = get_settings()
-        self.api_key = settings.OPENAI_API_KEY
+        self.openai_key = settings.OPENAI_API_KEY
+        self.groq_key = settings.GROQ_API_KEY
         self._client = None
+        self._use_groq = False
     
     @property
     def client(self) -> Optional[OpenAI]:
-        if self._client is None and self.api_key:
-            self._client = OpenAI(api_key=self.api_key)
+        if self._client is None:
+            key = self.groq_key or self.openai_key
+            if key:
+                base_url = None
+                if self.groq_key:
+                    base_url = "https://api.groq.com/openai/v1"
+                    self._use_groq = True
+                self._client = OpenAI(api_key=key, base_url=base_url)
         return self._client
+    
+    def _get_model(self) -> str:
+        if self._use_groq:
+            return "llama-3.1-8b-instant"
+        return "gpt-4o-mini"
     
     def get_response(
         self,
@@ -24,9 +37,9 @@ class OpenAIService:
         conversation_history: list = None
     ) -> str:
         if not self.client:
-            return "AI service not configured. Please set OPENAI_API_KEY."
+            return "AI service not configured. Please set OPENAI_API_KEY or GROQ_API_KEY."
         
-        messages = [{"role": "system", "content": system_prompt}]
+        messages: list = [{"role": "system", "content": system_prompt}]
         
         if conversation_history:
             for msg in conversation_history:
@@ -37,7 +50,7 @@ class OpenAIService:
         
         try:
             response = self.client.chat.completions.create(
-                model="gpt-4o-mini",
+                model=self._get_model(),
                 messages=messages,
                 temperature=0.7,
                 max_tokens=500
@@ -46,7 +59,26 @@ class OpenAIService:
             content = response.choices[0].message.content
             return content if content else "I'm here to help you book an appointment. How can I assist you today?"
         except Exception as e:
-            print(f"OpenAI API error: {e}")
+            print(f"Primary AI API error: {e}")
+            
+            if not self._use_groq and self.groq_key:
+                try:
+                    self._client = OpenAI(
+                        api_key=self.groq_key,
+                        base_url="https://api.groq.com/openai/v1"
+                    )
+                    self._use_groq = True
+                    response = self.client.chat.completions.create(
+                        model="llama-3.1-8b-instant",
+                        messages=messages,
+                        temperature=0.7,
+                        max_tokens=500
+                    )
+                    content = response.choices[0].message.content
+                    return content if content else "I'm here to help you book an appointment. How can I assist you today?"
+                except Exception as e2:
+                    print(f"Fallback Groq API error: {e2}")
+            
             return "Sorry, I'm having trouble connecting to the AI service. Please try again."
     
     def extract_booking_info(self, message: str) -> Optional[Dict[str, Any]]:
@@ -68,7 +100,7 @@ Return ONLY valid JSON starting with {{ and ending with }}. No explanations."""
 
         try:
             response = self.client.chat.completions.create(
-                model="gpt-4o-mini",
+                model=self._get_model(),
                 messages=[
                     {"role": "system", "content": "You extract structured data from user messages. Return only valid JSON."},
                     {"role": "user", "content": extraction_prompt}
@@ -102,16 +134,21 @@ Return ONLY valid JSON starting with {{ and ending with }}. No explanations."""
             for msg in messages
         ])
         
-        response = self.client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "Summarize the conversation in a brief paragraph."},
-                {"role": "user", "content": conversation_text}
-            ],
-            max_tokens=100
-        )
-        
-        return response.choices[0].message.content
+        try:
+            response = self.client.chat.completions.create(
+                model=self._get_model(),
+                messages=[
+                    {"role": "system", "content": "Summarize the conversation in a brief paragraph."},
+                    {"role": "user", "content": conversation_text}
+                ],
+                max_tokens=100
+            )
+            
+            content = response.choices[0].message.content
+            return content if content else ""
+        except Exception as e:
+            print(f"Summarize error: {e}")
+            return ""
 
 
 openai_service = OpenAIService()

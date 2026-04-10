@@ -130,38 +130,38 @@ export default function AdminAppointments() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-bold text-medical-800">Appointments</h2>
-          <p className="text-medical-500">Manage patient appointments</p>
+          <h2 className="text-xl md:text-2xl font-bold text-slate-800">Appointments</h2>
+          <p className="text-sm text-slate-500 hidden sm:block">Manage patient appointments</p>
         </div>
-        <div className="text-sm text-medical-500">
-          Total: {filteredAppointments.length} appointments
+        <div className="text-sm text-slate-500">
+          Total: {filteredAppointments.length}
         </div>
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-medical-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-slate-400" />
           <input
             type="text"
             placeholder="Search by name or phone..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 bg-white border border-medical-200 rounded-xl text-medical-800 placeholder:text-medical-400 focus:outline-none focus:ring-2 focus:ring-teal-500/50"
+            className="w-full pl-9 md:pl-10 pr-3 md:pr-4 py-2.5 md:py-3 bg-white border border-slate-200 rounded-lg md:rounded-xl text-sm md:text-base text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500/50"
           />
         </div>
         <div className="relative">
-          <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-medical-400" />
+          <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-slate-400" />
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="pl-10 pr-8 py-3 bg-white border border-medical-200 rounded-xl text-medical-800 focus:outline-none focus:ring-2 focus:ring-teal-500/50 appearance-none"
+            className="pl-9 md:pl-10 pr-8 md:pr-10 py-2.5 md:py-3 bg-white border border-slate-200 rounded-lg md:rounded-xl text-sm md:text-base text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500/50 appearance-none"
           >
-            <option value="all">All Status</option>
+            <option value="all">All</option>
             <option value="booked">Booked</option>
             <option value="pending">Pending</option>
             <option value="confirmed">Confirmed</option>
@@ -176,97 +176,101 @@ export default function AdminAppointments() {
         <div className="flex justify-end">
           <button
             onClick={deleteSelected}
-            className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all"
+            className="flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 bg-red-500 text-white rounded-lg md:rounded-xl text-sm hover:bg-red-600 transition-all"
           >
             <Trash2 className="w-4 h-4" />
-            Delete Selected ({selectedIds.length})
+            Delete ({selectedIds.length})
           </button>
         </div>
       )}
 
       {/* Table */}
-      <div className="bg-white rounded-2xl shadow-sm border border-medical-100 overflow-hidden">
+      <div className="bg-white rounded-lg md:rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
         {loading ? (
-          <div className="p-8 text-center text-medical-500">Loading...</div>
+          <div className="p-6 md:p-8 text-center text-slate-500">Loading...</div>
         ) : filteredAppointments.length === 0 ? (
-          <div className="p-8 text-center text-medical-500">No appointments found</div>
+          <div className="p-6 md:p-8 text-center text-slate-500">No appointments found</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-medical-50 border-b border-medical-100">
+              <thead className="bg-slate-50 border-b border-slate-100">
                 <tr>
-                  <th className="px-6 py-4 text-left">
+                  <th className="px-3 md:px-6 py-3 md:py-4 text-left">
                     <button onClick={toggleSelectAll} className="text-teal-600 hover:text-teal-700">
                       {selectedIds.length === filteredAppointments.length && filteredAppointments.length > 0 ? (
-                        <CheckSquare className="w-5 h-5" />
+                        <CheckSquare className="w-4 h-4 md:w-5 md:h-5" />
                       ) : (
-                        <Square className="w-5 h-5" />
+                        <Square className="w-4 h-4 md:w-5 md:h-5" />
                       )}
                     </button>
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-medical-700">Patient</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-medical-700">Service</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-medical-700">Date & Time</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-medical-700">Status</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-medical-700">Actions</th>
+                  <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs md:text-sm font-semibold text-slate-700">Patient</th>
+                  <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs md:text-sm font-semibold text-slate-700 hidden sm:table-cell">Service</th>
+                  <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs md:text-sm font-semibold text-slate-700">Date & Time</th>
+                  <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs md:text-sm font-semibold text-slate-700">Status</th>
+                  <th className="px-3 md:px-6 py-3 md:py-4 text-left text-xs md:text-sm font-semibold text-slate-700">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-medical-100">
+              <tbody className="divide-y divide-slate-100">
                 {filteredAppointments.map((apt) => (
                   <motion.tr
                     key={apt.id}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="hover:bg-medical-50/50"
+                    className="hover:bg-slate-50/50"
                   >
-                    <td className="px-6 py-4">
+                    <td className="px-3 md:px-6 py-3 md:py-4">
                       <button onClick={() => toggleSelect(apt.id)} className="text-teal-600 hover:text-teal-700">
                         {selectedIds.includes(apt.id) ? (
-                          <CheckSquare className="w-5 h-5" />
+                          <CheckSquare className="w-4 h-4 md:w-5 md:h-5" />
                         ) : (
-                          <Square className="w-5 h-5" />
+                          <Square className="w-4 h-4 md:w-5 md:h-5" />
                         )}
                       </button>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center">
-                          <User className="w-5 h-5 text-teal-600" />
+                    <td className="px-3 md:px-6 py-3 md:py-4">
+                      <div className="flex items-center gap-2 md:gap-3">
+                        <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-teal-100 flex items-center justify-center flex-shrink-0">
+                          <User className="w-4 h-4 md:w-5 md:h-5 text-teal-600" />
                         </div>
-                        <div>
-                          <p className="font-medium text-medical-800">{apt.patient_name}</p>
-                          <p className="text-sm text-medical-500">{apt.patient_phone}</p>
+                        <div className="min-w-0">
+                          <p className="font-medium text-slate-800 text-sm md:text-base truncate max-w-[100px] md:max-w-none">{apt.patient_name}</p>
+                          <p className="text-xs md:text-sm text-slate-500 md:hidden">{apt.patient_phone}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-medical-600">{apt.service_type}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2 text-medical-600">
-                        <Calendar className="w-4 h-4" />
-                        <span>{apt.appointment_date}</span>
-                        <Clock className="w-4 h-4 ml-2" />
-                        <span>{apt.appointment_time}</span>
+                    <td className="px-3 md:px-6 py-3 md:py-4 text-slate-600 text-sm hidden sm:table-cell">{apt.service_type}</td>
+                    <td className="px-3 md:px-6 py-3 md:py-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-slate-600 text-xs md:text-sm">
+                        <div className="flex items-center gap-1">
+                          <Calendar className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                          <span>{apt.appointment_date}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Clock className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                          <span>{apt.appointment_time}</span>
+                        </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusColors[apt.status]}`}>
+                    <td className="px-3 md:px-6 py-3 md:py-4">
+                      <span className={`px-2 md:px-3 py-1 rounded-full text-xs font-medium ${statusColors[apt.status]}`}>
                         {apt.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
+                    <td className="px-3 md:px-6 py-3 md:py-4">
+                      <div className="flex items-center gap-1 md:gap-2">
                         <button
                           onClick={() => setSelectedAppointment(apt)}
-                          className="p-2 text-medical-500 hover:bg-medical-100 rounded-lg"
+                          className="p-1.5 md:p-2 text-slate-500 hover:bg-slate-100 rounded-lg"
                         >
-                          <Eye className="w-4 h-4" />
+                          <Eye className="w-3.5 h-3.5 md:w-4 md:h-4" />
                         </button>
                         {apt.status === 'booked' && (
                           <button
                             onClick={() => updateStatus(apt.id, 'confirmed')}
-                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
+                            className="p-1.5 md:p-2 text-green-600 hover:bg-green-50 rounded-lg"
                           >
-                            <CheckCircle className="w-4 h-4" />
+                            <CheckCircle className="w-3.5 h-3.5 md:w-4 md:h-4" />
                           </button>
                         )}
                         {(apt.status === 'booked' || apt.status === 'confirmed') && (

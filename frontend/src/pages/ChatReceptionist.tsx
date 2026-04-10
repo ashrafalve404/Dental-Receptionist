@@ -16,6 +16,7 @@ export default function ChatReceptionist() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [quickReplies, setQuickReplies] = useState<string[]>([]);
   const [sessionId] = useState(() => {
     const stored = localStorage.getItem('chat_session_id');
     return stored || `session-${Date.now()}`;
@@ -53,6 +54,12 @@ export default function ChatReceptionist() {
         content: cleanResponse,
       };
       setMessages(prev => [...prev, assistantMessage]);
+
+      if (response.quick_replies && response.quick_replies.length > 0) {
+        setQuickReplies(response.quick_replies);
+      } else {
+        setQuickReplies([]);
+      }
 
       if (response.booking_confirmed) {
         setShowSuccessAlert(true);
@@ -108,6 +115,22 @@ export default function ChatReceptionist() {
               {isLoading && <TypingIndicator />}
               <div ref={messagesEndRef} />
             </div>
+
+            {/* Quick Replies */}
+            {quickReplies.length > 0 && (
+              <div className="px-4 pb-3 flex flex-wrap gap-2">
+                {quickReplies.map((reply, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleSendMessage(reply)}
+                    className="px-3 py-1.5 bg-teal-50 text-teal-700 text-sm rounded-full border border-teal-200 
+                             hover:bg-teal-100 transition-colors"
+                  >
+                    {reply}
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* Input */}
             <ChatInput 

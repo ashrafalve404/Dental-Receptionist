@@ -23,6 +23,7 @@ export interface AIChatResponse {
     reason?: string;
   };
   booking_confirmed?: boolean;
+  quick_replies?: string[];
 }
 
 export interface AIBookingRequest {

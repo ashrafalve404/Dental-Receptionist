@@ -55,3 +55,22 @@ def get_all_conversations_endpoint(
         })
     
     return result
+
+
+@router.delete("/session/{session_id}")
+def delete_conversation_by_session(session_id: str, db: Session = Depends(get_db)):
+    """Delete all conversations for a specific session (patient)"""
+    deleted = db.query(Conversation).filter(Conversation.session_id == session_id).delete()
+    db.commit()
+    return {"success": True, "deleted_count": deleted, "session_id": session_id}
+
+
+@router.delete("/{conversation_id}")
+def delete_conversation_message(conversation_id: int, db: Session = Depends(get_db)):
+    """Delete a specific conversation message"""
+    conversation = db.query(Conversation).filter(Conversation.id == conversation_id).first()
+    if conversation:
+        db.delete(conversation)
+        db.commit()
+        return {"success": True, "deleted_id": conversation_id}
+    return {"success": False, "error": "Conversation not found"}, 404
